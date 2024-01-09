@@ -1,0 +1,6 @@
+PART=$1
+if [[ -z $PART  ]]; then
+  compadd $(marks | cut -d' ' -f1)
+else
+  compadd $(marks | cut -d' ' -f1 | grep "$PART")
+fi
