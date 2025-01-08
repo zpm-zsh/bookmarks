@@ -2,7 +2,7 @@
 
 # Delete a bookmark
 local bookmark_search
-local bookmark_file="$(<"$BOOKMARKS_FILE")"
+local bookmark_file="$(<"$ZPM_BOOKMARKS_FILE")"
 
 if [[ -z "$1" ]]; then
   bookmark_search="$(print -D $PWD)\|"
@@ -24,4 +24,4 @@ else
   done
 fi
 
-printf '%s\n' "${bookmark_file}" >! $BOOKMARKS_FILE
+printf '%s\n' "${bookmark_file}" >! $ZPM_BOOKMARKS_FILE

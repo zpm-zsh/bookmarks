@@ -33,16 +33,16 @@ delmark # Will delete current dir from bookmarks
 
 ```sh
 marks # Show all marks
-# Or 
+# Or
 marks foo # Show path to bookmark
 ```
 
 ## Notes/Tips:
 
-You can change the location of the bookmarks file (default is $HOME/.bookmarks) by adding the environment variable 'BOOKMARKS_FILE' to your shell profile.
+You can change the location of the bookmarks file (default is $XDG_CONFIG_HOME/bookmarks usually ~/.configs/zsh/bookmarks) by adding the environment variable 'ZPM_BOOKMARKS_FILE' to your shell profile.
 
 ```sh
-export BOOKMARKS_FILE="foo/bar"
+export ZPM_BOOKMARKS_FILE="foo/bar"
 ```
 
 If you were expecting this to be a port of similarly named [Bashmarks (by huyng)](https://github.com/huyng/bashmarks), you can setup zshmarks to behave in roughly the same way by adding the following aliases to your shell setup files/dotfiles:

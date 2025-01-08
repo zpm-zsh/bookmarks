@@ -1,7 +1,7 @@
 #compdef c delmark marks
 #autoload
 
-declare -a bookmark_array; bookmark_array=( ${(f)"$(<$BOOKMARKS_FILE)"} )
+declare -a bookmark_array; bookmark_array=( ${(f)"$(<$ZPM_BOOKMARKS_FILE)"} )
 declare -a bookmarks; bookmarks=()
 
 local bookmark_name bookmark_path bookmark_line
