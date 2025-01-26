@@ -27,12 +27,10 @@ ZPM_BOOKMARKS_FILE=${ZPM_BOOKMARKS_FILE:A}
 if [[ -e $ZPM_BOOKMARKS_FILE ]]; then
   echo "Please move file to XDG_CONFIG_HOME: $XDG_CONFIG_HOME/zsh/bookmarks"
 else
-  if [[ -e $XDG_CONFIG_HOME/zsh/bookmarks ]]; then
-    # Set ZPM_BOOKMARKS_FILE to the new location
-    ZPM_BOOKMARKS_FILE="${XDG_CONFIG_HOME}/zsh/bookmarks"
-    # Normalize file path
-    ZPM_BOOKMARKS_FILE=${ZPM_BOOKMARKS_FILE:A}
-  fi
+  # Set ZPM_BOOKMARKS_FILE to the new location
+  ZPM_BOOKMARKS_FILE="${XDG_CONFIG_HOME}/zsh/bookmarks"
+  # Normalize file path
+  ZPM_BOOKMARKS_FILE=${ZPM_BOOKMARKS_FILE:A}
 fi
 
 # Create file it if it doesn't exist
