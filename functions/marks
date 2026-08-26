@@ -8,13 +8,27 @@ if [[ -n "$1" ]]; then
   @bookmark_path_colorize "$(grep -E "\|${1}$" <<< "$bookmark_file" | awk -F'|' '{print $1}')"
   echo
 else
-  echo "$bookmark_file" | while read line; do
+  local -a names paths
+  local -i max_len=0
+  local line
+  while IFS= read -r line; do
+    [[ -z "$line" ]] && continue
     bookmark_path="${line%|*}"
     bookmark_name="${line#*|}"
 
     if [[ -n "$bookmark_path" && -n "$bookmark_name" ]]; then
-      echo "$(@bookmark_name_colorize $bookmark_name)|$(@bookmark_path_colorize $bookmark_path)"
+      names+=("$bookmark_name")
+      paths+=("$bookmark_path")
+      (( ${#bookmark_name} > max_len )) && max_len=${#bookmark_name}
     fi
+  done <<< "$bookmark_file"
 
-  done | column -s '|' -o "  ${c[yellow]}${c[bold]}--${c[reset]} " -t
+  for i in {1..${#names}}; do
+    local c_name="$(@bookmark_name_colorize "${names[i]}")"
+    local c_path="$(@bookmark_path_colorize "${paths[i]}")"
+    local -i pad=$(( max_len - ${#names[i]} ))
+    local spaces=""
+    (( pad > 0 )) && spaces="${(l:pad:: :)}"
+    printf "%s%s  %s--%s %s\n" "$c_name" "$spaces" "${c[yellow]}${c[bold]}" "${c[reset]}" "$c_path"
+  done
 fi
