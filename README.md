@@ -9,6 +9,8 @@ A port of [Bashmarks (by Todd Werth)](https://github.com/twerth/bashmarks), a si
 ```sh
 c foo
 ```
+> `c` supports fuzzy search! Instead of `c longFolderMarkName` one can just do `c long`!
+> `c` also supports bash autocomplete
 
 * `mark` - used to create a new bookmark for your current working directory
 
