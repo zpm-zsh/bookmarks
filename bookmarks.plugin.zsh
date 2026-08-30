@@ -38,4 +38,5 @@ if [[ ! -f $ZPM_BOOKMARKS_FILE ]]; then
   echo -n > $ZPM_BOOKMARKS_FILE
 fi
 
-autoload -Uz mark marks c delmark @bookmark_path_colorize @bookmark_name_colorize @bookmark_join
+autoload -Uz mark marks c _c delmark @bookmark_path_colorize @bookmark_name_colorize @bookmark_join
+compdef _c c
