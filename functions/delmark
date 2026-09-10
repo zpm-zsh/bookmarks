@@ -1,27 +1,24 @@
 #!/usr/bin/env zsh
 
 # Delete a bookmark
-local bookmark_search
 local bookmark_file="$(<"$ZPM_BOOKMARKS_FILE")"
 
 if [[ -z "$1" ]]; then
-  bookmark_search="$(print -D $PWD)\|"
-
-  if ! grep -E -q "$bookmark_search" <<< "$bookmark_file"; then
-    echo "'$(print -D $PWD)' not found in you bookmark , skipping."
+  local p="$(print -D $PWD)"
+  if ! awk -F'|' -v p="$p" '$1 == p {found=1; exit} END {exit !found}' <<< "$bookmark_file"; then
+    echo "'$p' not found in your bookmarks, skipping."
+  else
+    bookmark_file="$(awk -F'|' -v p="$p" '$1 != p' <<< "$bookmark_file")"
   fi
-
-  bookmark_file="$(grep -E -v "$bookmark_search" <<< $bookmark_file )"
 else
-  for bookmark_name in $@; do
-    bookmark_search="\|${bookmark_name}$"
-
-    if ! grep -E -q "$bookmark_search" <<< "$bookmark_file"; then
-      echo "'${bookmark_name}' not found in you bookmark , skipping."
+  for bookmark_name in "$@"; do
+    if ! awk -F'|' -v n="$bookmark_name" '$2 == n {found=1; exit} END {exit !found}' <<< "$bookmark_file"; then
+      echo "'${bookmark_name}' not found in your bookmarks, skipping."
+    else
+      bookmark_file="$(awk -F'|' -v n="$bookmark_name" '$2 != n' <<< "$bookmark_file")"
     fi
-
-    bookmark_file="$(grep -E -v "$bookmark_search" <<< $bookmark_file )"
   done
 fi
 
-printf '%s\n' "${bookmark_file}" >! $ZPM_BOOKMARKS_FILE
+# Write back without trailing newlines inserted by command substitution
+printf '%s\n' "${bookmark_file}" | sed '/^$/d' >! "$ZPM_BOOKMARKS_FILE"

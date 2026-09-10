@@ -17,25 +17,25 @@ if [[ $PMSPEC != *f* ]] {
   fpath+=( "${0:h}/functions" )
 }
 
-# Set ZPM_BOOKMARKS_FILE if it doesn't exist to the default.
-# Allows for a user-configured ZPM_BOOKMARKS_FILE.
-ZPM_BOOKMARKS_FILE=${ZPM_BOOKMARKS_FILE:-"$HOME/.bookmarks"}
+# If user didn't explicitly set ZPM_BOOKMARKS_FILE, use XDG config
+if [[ -z "$ZPM_BOOKMARKS_FILE" ]]; then
+  ZPM_BOOKMARKS_FILE="${XDG_CONFIG_HOME}/zsh/bookmarks"
+  # Migrate legacy file if it exists
+  if [[ -f "$HOME/.bookmarks" ]]; then
+    mkdir -p "${ZPM_BOOKMARKS_FILE:h}"
+    mv "$HOME/.bookmarks" "$ZPM_BOOKMARKS_FILE"
+  fi
+fi
 
 # Normalize file path
 ZPM_BOOKMARKS_FILE=${ZPM_BOOKMARKS_FILE:A}
 
-if [[ -e $ZPM_BOOKMARKS_FILE ]]; then
-  echo "Please move file to XDG_CONFIG_HOME: $XDG_CONFIG_HOME/zsh/bookmarks"
-else
-  # Set ZPM_BOOKMARKS_FILE to the new location
-  ZPM_BOOKMARKS_FILE="${XDG_CONFIG_HOME}/zsh/bookmarks"
-  # Normalize file path
-  ZPM_BOOKMARKS_FILE=${ZPM_BOOKMARKS_FILE:A}
-fi
+# Ensure directory exists
+mkdir -p "${ZPM_BOOKMARKS_FILE:h}"
 
-# Create file it if it doesn't exist
+# Create file if it doesn't exist
 if [[ ! -f $ZPM_BOOKMARKS_FILE ]]; then
-  echo -n > $ZPM_BOOKMARKS_FILE
+  touch $ZPM_BOOKMARKS_FILE
 fi
 
 autoload -Uz mark marks c delmark @bookmark_path_colorize @bookmark_name_colorize @bookmark_join

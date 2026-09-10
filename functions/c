@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 local bookmark_name="$1"
-local bookmark; bookmark=$(grep -E "\|${bookmark_name}$" "$ZPM_BOOKMARKS_FILE" 2>/dev/null)
+local bookmark; bookmark=$(awk -F'|' -v n="$bookmark_name" '$2 == n {print $0; exit}' "$ZPM_BOOKMARKS_FILE" 2>/dev/null)
 
 if [[ -z "$bookmark" ]] ; then
   echo 'Invalid name, please provide a valid bookmark name. For example:'
@@ -12,5 +12,5 @@ if [[ -z "$bookmark" ]] ; then
   return 1
 else
   local dir="${bookmark%%|*}"
-  builtin cd ${dir//\~/$HOME}
+  builtin cd "${dir//\~/$HOME}"
 fi
